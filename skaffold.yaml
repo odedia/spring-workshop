@@ -1,0 +1,19 @@
+apiVersion: skaffold/v2beta5
+kind: Config
+metadata:
+  name: k-s-demo-app--
+build:
+  artifacts:
+  - image: odedia/demo
+    custom:
+      buildCommand: ./mvnw spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=$IMAGE && docker push $IMAGE
+      dependencies:
+        paths:
+        - src
+        - pom.xml
+deploy:
+  kubectl:
+    manifests:
+    - k8s/deployment.yaml
+    - k8s/service.yaml
+
